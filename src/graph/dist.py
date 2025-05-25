@@ -1,28 +1,97 @@
-import numpy as np 
-import networkx as nx 
+import numpy as np
+import networkx as nx
+from typing import List, Tuple, Any, Dict
+
 
 class GraphDist:
-    def __init__(self, ksi: np.ndarray, d: float=0.5):
-        self.n = len(ksi)
-        self.d = d
+    """
+    Класс для создания и анализа графов на основе пороговых расстояний.
+
+    Граф строится путем соединения вершин, расстояние между которыми
+    превышает заданное пороговое значение d. Использует библиотеку NetworkX
+    для представления и анализа графа.
+    """
+
+    def __init__(self, ksi: np.ndarray, d: float = 0.5):
+        """
+        Инициализация графа на основе пороговых расстояний.
+
+        Args:
+            ksi: Одномерный массив значений для построения графа.
+            d: Пороговое расстояние для определения связей между вершинами.
+        """
+        self.n: int = len(ksi)
+        self.d: float = d
         self.G = nx.Graph()
-        tmp = sorted([[ksi[i], i] for i in range(self.n)])
+
+        valid_indices: np.ndarray = np.isfinite(ksi)
+        ksi_clean: np.ndarray
+        if not np.all(valid_indices):
+            valid_values: np.ndarray = ksi[valid_indices]
+            if len(valid_values) > 0:
+                median_val: float = np.median(valid_values)
+                ksi_clean = np.where(valid_indices, ksi, median_val)
+            else:
+                ksi_clean = np.zeros_like(ksi)
+        else:
+            ksi_clean = ksi
+
+        tmp: List[Tuple[float, int]] = sorted(
+            [(ksi_clean[i], i) for i in range(self.n)]
+        )
         for i in range(self.n):
             self.G.add_node(i)
-        dop = [[1 for _ in range(self.n)] for _ in range(self.n)]
+        dop: List[List[int]] = [[1 for _ in range(self.n)] for _ in range(self.n)]
         for i in range(self.n):
-            for j in range(i+1, self.n):
+            for j in range(i + 1, self.n):
                 if tmp[j][0] - tmp[i][0] > self.d:
-                    break 
+                    break
                 dop[tmp[i][1]][tmp[j][1]] = 0
                 dop[tmp[j][1]][tmp[i][1]] = 0
         for i in range(self.n):
-            for j in range(i+1, self.n):
+            for j in range(i + 1, self.n):
                 if dop[i][j]:
                     self.G.add_edge(i, j)
 
-    def calc_metric(self, strategies = ['largest_first']):
-        res = [] 
+    def calc_metric(self, strategies: List[str] = None) -> float:
+        """
+        Вычисляет метрику графа, используя жадные алгоритмы раскраски графа.
+
+        Метрика определяется как среднее количество цветов, необходимых для
+        раскраски графа различными стратегиями.
+
+        Args:
+            strategies: Список стратегий раскраски графа для использования.
+                       Если None, используется только стратегия 'largest_first'.
+
+        Returns:
+            Среднее количество цветов, необходимых для раскраски графа.
+
+        Raises:
+            TypeError: Если параметр strategies не является списком строк.
+        """
+        if strategies is None:
+            strategies = ["largest_first"]
+
+        if not isinstance(strategies, list) or not all(
+            isinstance(s, str) for s in strategies
+        ):
+            raise TypeError("Параметр 'strategies' должен быть списком строк.")
+
+        results: List[int] = []
         for strategy in strategies:
-            res.append(len(nx.greedy_color(self.G, strategy=strategy)))
-        return np.mean(res)
+            try:
+                coloring: Dict[Any, int] = nx.greedy_color(self.G, strategy=strategy)
+                if not coloring:
+                    num_colors = 0 if self.n == 0 else 1
+                else:
+                    num_colors = max(coloring.values()) + 1
+                results.append(num_colors)
+            except nx.NetworkXError as e:
+                print(f"Ошибка при раскраске графа со стратегией '{strategy}': {e}")
+                results.append(0)
+
+        if not results:
+            return 0.0
+
+        return float(np.mean(results))
