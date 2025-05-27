@@ -24,20 +24,10 @@ class GraphDist:
         self.d: float = d
         self.G = nx.Graph()
 
-        valid_indices: np.ndarray = np.isfinite(ksi)
-        ksi_clean: np.ndarray
-        if not np.all(valid_indices):
-            valid_values: np.ndarray = ksi[valid_indices]
-            if len(valid_values) > 0:
-                median_val: float = np.median(valid_values)
-                ksi_clean = np.where(valid_indices, ksi, median_val)
-            else:
-                ksi_clean = np.zeros_like(ksi)
-        else:
-            ksi_clean = ksi
+        ksi = np.nan_to_num(ksi, nan=ksi.mean())
 
         tmp: List[Tuple[float, int]] = sorted(
-            [(ksi_clean[i], i) for i in range(self.n)]
+            [(ksi[i], i) for i in range(self.n)]
         )
         for i in range(self.n):
             self.G.add_node(i)

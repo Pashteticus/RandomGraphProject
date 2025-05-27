@@ -22,20 +22,10 @@ class GraphKnn:
         self.k: int = k
         self.G: List[List[int]] = [[0 for _ in range(self.n)] for _ in range(self.n)]
 
-        valid_indices: np.ndarray = np.isfinite(ksi)
-        ksi_clean: np.ndarray
-        if not np.all(valid_indices):
-            valid_values: np.ndarray = ksi[valid_indices]
-            if len(valid_values) > 0:
-                median_val: float = np.median(valid_values)
-                ksi_clean = np.where(valid_indices, ksi, median_val)
-            else:
-                ksi_clean = np.zeros_like(ksi)
-        else:
-            ksi_clean = ksi
+        ksi = np.nan_to_num(ksi, nan=ksi.mean())
 
         tmp: List[Tuple[float, int]] = sorted(
-            [(ksi_clean[i], i) for i in range(self.n)]
+            [(ksi[i], i) for i in range(self.n)]
         )
 
         for i in range(self.n):
@@ -57,15 +47,8 @@ class GraphKnn:
         """
         res: int = 0
         for v1 in range(self.n):
-            for v2_offset in range(1, self.k + 1):
-                v2: int = v1 + v2_offset
-                if v2 >= self.n:
-                    break
-
-                for v3_offset in range(v2_offset + 1, self.k + 1):
-                    v3: int = v1 + v3_offset
-                    if v3 >= self.n:
-                        break
+            for v2 in range(v1 + 1, self.n):
+                for v3 in range(v2 + 1, self.n):
                     if self.G[v1][v2] and self.G[v1][v3] and self.G[v2][v3]:
                         res += 1
         return res
