@@ -11,7 +11,15 @@ class Generator:
     - распределение Стьюдента (h)
     """
 
-    def __init__(self, v: int = 3, alpha: float = 1.0, size: int = 25, seed: int = 42):
+    def __init__(
+        self,
+        v: int = 3,
+        alpha: float = 1.0,
+        shape: float = 0.5,
+        scale: float = np.sqrt(2 / 3),
+        size: int = 25,
+        seed: int = 42,
+    ):
         """
         Инициализация генератора последовательностей.
 
@@ -27,6 +35,8 @@ class Generator:
         self.size: int = size
         self.f = lambda: gen.normal(0, self.alpha, self.size)
         self.h = lambda: gen.standard_t(self.v, self.size)
+        self.f_two = lambda: gen.pareto(self.alpha, size=self.size)
+        self.h_two = lambda: gen.gamma(shape=shape, scale=scale, size=self.size)
 
     def get_f(self) -> np.ndarray:
         """
@@ -45,3 +55,21 @@ class Generator:
             Массив размера size из распределения Стьюдента.
         """
         return self.h()
+
+    def get_f_two(self) -> np.ndarray:
+        """
+        Генерирует выборку из распределения Парето с параметром alpha.
+
+        Returns:
+            Массив размера size из распределения Парето.
+        """
+        return self.f_two()
+
+    def get_h_two(self) -> np.ndarray:
+        """
+        Генерирует выборку из гамма-распределения с shape и scale.
+
+        Returns:
+            Массив размера size из гамма-распределения.
+        """
+        return self.h_two()

@@ -24,9 +24,7 @@ class GraphKnn:
 
         ksi = np.nan_to_num(ksi, nan=ksi.mean())
 
-        tmp: List[Tuple[float, int]] = sorted(
-            [(ksi[i], i) for i in range(self.n)]
-        )
+        tmp: List[Tuple[float, int]] = sorted([(ksi[i], i) for i in range(self.n)])
 
         for i in range(self.n):
             for j in range(i + 1, min(self.n, i + k + 1)):
@@ -52,3 +50,29 @@ class GraphKnn:
                     if self.G[v1][v2] and self.G[v1][v3] and self.G[v2][v3]:
                         res += 1
         return res
+
+    def calc_connected_components(self) -> int:
+        """
+        Вычисляет количество компонент связности в графе.
+
+        Компонента связности - это максимальное множество вершин,
+        между которыми существует путь. Используется алгоритм поиска в глубину (DFS).
+
+        Returns:
+            Количество компонент связности в графе.
+        """
+        visited: List[bool] = [False] * self.n
+        components: int = 0
+
+        def dfs(v: int) -> None:
+            visited[v] = True
+            for u in range(self.n):
+                if self.G[v][u] and not visited[u]:
+                    dfs(u)
+
+        for v in range(self.n):
+            if not visited[v]:
+                dfs(v)
+                components += 1
+
+        return components

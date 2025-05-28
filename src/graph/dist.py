@@ -26,9 +26,7 @@ class GraphDist:
 
         ksi = np.nan_to_num(ksi, nan=ksi.mean())
 
-        tmp: List[Tuple[float, int]] = sorted(
-            [(ksi[i], i) for i in range(self.n)]
-        )
+        tmp: List[Tuple[float, int]] = sorted([(ksi[i], i) for i in range(self.n)])
         for i in range(self.n):
             self.G.add_node(i)
         dop: List[List[int]] = [[1 for _ in range(self.n)] for _ in range(self.n)]
@@ -85,3 +83,35 @@ class GraphDist:
             return 0.0
 
         return float(np.mean(results))
+
+    def calc_chromatic_number(self, strategy: str = "largest_first") -> int:
+        """
+        Вычисляет хроматическое число графа.
+
+        Хроматическое число - это минимальное количество цветов, необходимых
+        для раскраски вершин графа таким образом, чтобы никакие две смежные
+        вершины не имели одинакового цвета.
+
+        Args:
+            strategy: Стратегия жадного алгоритма раскраски.
+                     Доступные стратегии: 'largest_first', 'random_sequential',
+                     'smallest_last', 'independent_set', 'connected_sequential_bfs',
+                     'connected_sequential_dfs', 'saturation_largest_first'.
+
+        Returns:
+            Хроматическое число графа (приближённое значение).
+
+        Raises:
+            TypeError: Если параметр strategy не является строкой.
+        """
+        if not isinstance(strategy, str):
+            raise TypeError("Параметр 'strategy' должен быть строкой.")
+
+        try:
+            coloring: Dict[Any, int] = nx.greedy_color(self.G, strategy=strategy)
+            if not coloring:
+                return 0 if self.n == 0 else 1
+            return max(coloring.values()) + 1
+        except nx.NetworkXError as e:
+            print(f"Ошибка при раскраске графа со стратегией '{strategy}': {e}")
+            return 0
