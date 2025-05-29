@@ -5,3 +5,4 @@
 *.pyd
 *.pdb
 catboost_info
+.ruff_cache
