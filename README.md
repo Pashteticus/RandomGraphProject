@@ -54,66 +54,60 @@ RandomGraphProject/
 1. **Установите uv** (если ещё не установлен):
 
 ```bash
-   curl -LsSf https://astral.sh/uv/install.sh | sh
-   ```
+curl -LsSf https://astral.sh/uv/install.sh | sh
+```
 
 2.**Клонируйте репозиторий**:
 
 ```bash
-   git clone <URL_РЕПОЗИТОРИЯ>
-   cd RandomGraphProject
-   ```
+git clone <URL_РЕПОЗИТОРИЯ>
+cd RandomGraphProject
+```
 
 3. **Создайте виртуальное окружение и установите зависимости**:
 
 ```bash
-   uv venv venv -p 3.13
-   source .venv/bin/activate  # macOS/Linux
-   # или .venv\Scripts\activate  # Windows
-   uv pip install -r requirements.txt
+uv venv venv -p 3.13
+source .venv/bin/activate  # macOS/Linux
+# или .venv\Scripts\activate  # Windows
+uv pip install -r requirements.txt
 ```
 
 ## 📚 Использование
 
 1. **Базовое использование генератора**:
 
-   ```python
-   from src.data import Generator
-   
-   # Создание генератора
-   gen = Generator(v=3, alpha=1.0, size=100)
-   
-   # Генерация данных
-   normal_data = gen.get_f()      # Нормальное распределение
-   student_data = gen.get_h()     # Распределение Стьюдента
-   ```
+```python
+from src.data import Generator
+
+# Создание генератора
+gen = Generator(v=3, alpha=1.0, size=100)
+
+# Генерация данных
+normal_data = gen.get_f()      # Нормальное распределение
+student_data = gen.get_h()     # Распределение Стьюдента
+```
 
 2. **Создание и анализ графов**:
 
-   ```python
-   from src.graph.knn import GraphKnn
-   from src.graph.dist import GraphDist
-   
-   # KNN-граф
-   knn_graph = GraphKnn(normal_data, k=5)
-   triangles = knn_graph.calc_metric()
-   
-   # Distance-граф  
-   dist_graph = GraphDist(normal_data, d=0.75)
-   chromatic_num = dist_graph.calc_metric()
-   ```
+```python
+from src.graph.knn import GraphKnn
+from src.graph.dist import GraphDist
+
+# KNN-граф
+knn_graph = GraphKnn(normal_data, k=5)
+triangles = knn_graph.calc_metric()
+
+# Distance-граф  
+dist_graph = GraphDist(normal_data, d=0.75)
+chromatic_num = dist_graph.calc_metric()
+```
 
 3. **Симуляции Монте-Карло**:
 
-   ```python
-   from src.monte_carlo import MonteCarlo
-   
-   mc = MonteCarlo(generator=gen, num_simulations=1000)
-   results = mc.run_simulation('knn', {'k': 5}, lambda g: g.calc_metric())
-   ```
+```python
+from src.monte_carlo import MonteCarlo
 
-## 📊 Примеры экспериментов
-
-- **Part 1**: Сравнение графов на основе нормального распределения vs распределения Стьюдента
-- **Part 2**: Анализ графов на основе распределений Парето vs гамма распределения 
-- **Классификация**: Машинное обучение для автоматического определения типа распределения по метрикам графа
+mc = MonteCarlo(generator=gen, num_simulations=1000)
+results = mc.run_simulation('knn', {'k': 5}, lambda g: g.calc_metric())
+```
