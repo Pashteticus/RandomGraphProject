@@ -1,0 +1,297 @@
+\documentclass[a4paper,12pt]{report}
+\usepackage[utf8]{inputenc}
+\usepackage[T1,T2A]{fontenc}
+\usepackage[english,russian]{babel}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{upgreek}
+\usepackage{amssymb}
+\usepackage{wasysym}
+\usepackage{graphicx}
+\usepackage{amsthm}
+\usepackage{hyperref}
+\usepackage{geometry}
+\usepackage{listings}
+\usepackage{xcolor}
+
+% Настройка геометрии страницы
+\geometry{left=3cm, right=1.5cm, top=2cm, bottom=2cm}
+
+% Настройка hyperref
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+    citecolor=blue
+}
+
+% Настройка листингов кода
+\lstset{
+    basicstyle=\ttfamily\small,
+    keywordstyle=\color{blue},
+    commentstyle=\color{green},
+    stringstyle=\color{red},
+    showstringspaces=false,
+    breaklines=true,
+    frame=single,
+    numbers=left,
+    numberstyle=\tiny\color{gray}
+}
+
+\title{Проект по случайным графам}
+\author{Кулесов Илья, ПАДИИ, 2 курс}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+
+% ===== ВВЕДЕНИЕ =====
+\chapter*{Введение}
+\addcontentsline{toc}{chapter}{Введение}
+
+Данный отчёт описывает исследование свойств случайных графов, построенных на основе различных вероятностных распределений. В работе рассматриваются два типа графов: графы k-ближайших соседей (KNN) и дистанционные графы.
+
+\textbf{Цель работы:} Исследовать поведение числовых характеристик случайных графов в зависимости от параметров распределений и параметров построения графов.
+
+\textbf{Задачи:}
+\begin{enumerate}
+    \item Исследовать поведение характеристики $\tau$ в зависимости от параметров распределений
+    \item Исследовать влияние параметров процедуры построения графа и размера выборки
+    \item Построить статистические критерии и оценить их мощность
+    \item Применить методы машинного обучения для классификации распределений
+\end{enumerate}
+
+% ===== ЧАСТЬ 1 =====
+\part{Исследование свойств характеристик графов}
+
+\chapter{Исследование поведения числовой характеристики $\tau$ в зависимости от параметров распределений}
+
+\section{Методология исследования}
+
+\subsection{Описание числовых характеристик}
+В работе исследуются две основные характеристики:
+\begin{itemize}
+    \item $\tau^{KNN}$ - количество треугольников в графе k-ближайших соседей
+    \item $\tau^{dist}$ - хроматическое число дистанционного графа
+\end{itemize}
+
+\subsection{Исследуемые распределения}
+\textbf{Эксперимент 1:} Normal vs Student-t
+\begin{itemize}
+    \item Нормальное распределение $N(0, \alpha)$
+    \item Распределение Стьюдента с $\nu$ степенями свободы
+\end{itemize}
+
+\textbf{Эксперимент 2:} Pareto vs Gamma
+\begin{itemize}
+    \item Распределение Парето с параметром $\alpha$
+    \item Гамма-распределение с параметрами shape и scale
+\end{itemize}
+
+\section{Характеристика $\tau^{KNN}$ для графов k-ближайших соседей}
+
+\subsection{Эксперимент 1: Normal vs Student-t}
+% TODO: Добавить результаты исследования зависимости от параметра alpha
+% Зафиксированные параметры: n = 100, k = 5, число итераций МК = 1000
+
+\subsection{Эксперимент 2: Pareto vs Gamma}
+% TODO: Добавить результаты для распределений Парето и Гамма
+
+\section{Характеристика $\tau^{dist}$ для дистанционных графов}
+
+\subsection{Эксперимент 1: Normal vs Student-t}
+% TODO: Добавить результаты для дистанционных графов
+
+\subsection{Эксперимент 2: Pareto vs Gamma}
+% TODO: Добавить результаты для второго эксперимента
+
+\chapter{Исследование поведения характеристики $\tau$ в зависимости от параметров построения графа}
+
+\section{Влияние размера выборки}
+
+\subsection{Графы k-ближайших соседей}
+% TODO: Исследование зависимости от n при фиксированных параметрах распределений
+
+\subsection{Дистанционные графы}
+% TODO: Аналогичное исследование для дистанционных графов
+
+\section{Влияние параметров графа}
+
+\subsection{Параметр k для KNN-графов}
+% TODO: Исследование влияния количества соседей
+
+\subsection{Параметр расстояния для дистанционных графов}
+% TODO: Исследование влияния порогового расстояния
+
+\chapter{Построение статистических критериев}
+
+\section{Критерий для характеристики $\tau^{KNN}$}
+
+\subsection{Построение множества A при $\alpha = 0.05$}
+% TODO: Описание построения критерия и порогового значения
+
+\subsection{Оценка мощности критерия}
+% TODO: Результаты оценки мощности
+
+\section{Критерий для характеристики $\tau^{dist}$}
+
+\subsection{Построение множества A при $\alpha = 0.05$}
+% TODO: Аналогично для дистанционных графов
+
+\subsection{Оценка мощности критерия}
+% TODO: Сравнение мощности критериев
+
+\section{ROC-анализ}
+% TODO: Построение ROC-кривых и вычисление AUC
+
+% ===== ЧАСТЬ 2 =====
+\part{Применение машинного обучения для классификации распределений}
+
+\chapter{Классификация с использованием нескольких характеристик}
+
+\section{Подготовка данных}
+
+\subsection{Дополнительные характеристики графов}
+Помимо основных характеристик $\tau^{KNN}$ и $\tau^{dist}$, рассматриваются:
+\begin{itemize}
+    \item Количество компонент связности
+    \item Максимальная степень вершины
+    \item Средняя степень вершины
+    \item Диаметр графа (если применимо)
+\end{itemize}
+
+\subsection{Формирование датасетов}
+% TODO: Описание процедуры генерации данных для обучения
+
+\section{Эксперимент 1: Normal vs Student-t}
+
+\subsection{Используемые алгоритмы}
+\begin{itemize}
+    \item Логистическая регрессия
+    \item Дерево решений
+    \item CatBoost
+\end{itemize}
+
+\subsection{Результаты для различных размеров графов}
+
+\subsubsection{Графы на 25 вершинах}
+% TODO: Таблица результатов с метриками качества
+
+\subsubsection{Графы на 100 вершинах}
+% TODO: Таблица результатов
+
+\subsubsection{Графы на 500 вершинах}
+% TODO: Таблица результатов
+
+\section{Эксперимент 2: Pareto vs Gamma}
+
+\subsection{Результаты классификации}
+% TODO: Аналогичные результаты для второго эксперимента
+
+\subsection{Сравнение с первым экспериментом}
+% TODO: Анализ различий в качестве классификации
+
+\chapter{Анализ важности признаков и корреляций}
+
+\section{Корреляционный анализ}
+
+\subsection{Корреляция между характеристиками}
+% TODO: Матрица корреляций
+
+\subsection{Зависимость от размера выборки}
+% TODO: Эволюция корреляций при изменении n
+
+\section{Важность признаков}
+
+\subsection{Анализ коэффициентов логистической регрессии}
+% TODO: Интерпретация весов признаков
+
+\subsection{Feature importance для деревьев решений}
+% TODO: Анализ важности признаков
+
+\subsection{SHAP-анализ для CatBoost}
+% TODO: Детальный анализ вклада признаков
+
+\chapter{Финальная оценка качества}
+
+\section{Метрики качества}
+
+\subsection{Основные метрики}
+\begin{itemize}
+    \item Accuracy (точность)
+    \item Precision (точность положительных предсказаний)
+    \item Recall (полнота)
+    \item F1-score (гармоническое среднее precision и recall)
+\end{itemize}
+
+\subsection{Статистические метрики}
+\begin{itemize}
+    \item Ошибка первого рода
+    \item Мощность критерия
+    \item AUC-ROC
+\end{itemize}
+
+\section{Сравнение подходов}
+
+\subsection{Простые статистические критерии vs ML}
+% TODO: Сравнительная таблица
+
+\subsection{Рекомендации по выбору метода}
+% TODO: Выводы о применимости различных подходов
+
+% ===== ЗАКЛЮЧЕНИЕ =====
+\chapter*{Заключение}
+\addcontentsline{toc}{chapter}{Заключение}
+
+\section*{Основные результаты}
+% TODO: Перечисление ключевых выводов
+
+\section*{Практические рекомендации}
+% TODO: Рекомендации по применению результатов
+
+\section*{Направления дальнейших исследований}
+% TODO: Возможные расширения работы
+
+% ===== ПРИЛОЖЕНИЯ =====
+\appendix
+
+\chapter{Код экспериментов}
+
+\section{Генерация данных}
+\begin{lstlisting}[language=Python, caption=Пример генерации данных]
+# TODO: Добавить ключевые фрагменты кода
+\end{lstlisting}
+
+\section{Построение графов}
+\begin{lstlisting}[language=Python, caption=Построение KNN-графа]
+# TODO: Код построения графов
+\end{lstlisting}
+
+\chapter{Дополнительные результаты}
+
+\section{Таблицы результатов}
+% TODO: Подробные таблицы всех экспериментов
+
+\section{Графики и визуализации}
+% TODO: Дополнительные графики
+
+% ===== БИБЛИОГРАФИЯ =====
+\begin{thebibliography}{99}
+
+\bibitem{networkx} NetworkX developers. NetworkX: Network Analysis in Python. \url{https://networkx.org/}
+
+\bibitem{sklearn} Scikit-learn developers. Scikit-learn: Machine Learning in Python. \url{https://scikit-learn.org/}
+
+\bibitem{catboost} CatBoost developers. CatBoost: Gradient Boosting on Decision Trees. \url{https://catboost.ai/}
+
+\bibitem{numpy} NumPy developers. NumPy: The fundamental package for scientific computing with Python. \url{https://numpy.org/}
+
+% TODO: Добавить дополнительные источники
+
+\end{thebibliography}
+
+\end{document}
