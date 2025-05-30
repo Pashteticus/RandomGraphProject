@@ -18,7 +18,6 @@ class Generator:
         shape: float = 0.5,
         scale: float = np.sqrt(2 / 3),
         size: int = 25,
-        seed: int = 42,
     ):
         """
         Инициализация генератора последовательностей.
@@ -29,7 +28,7 @@ class Generator:
             size: Размер генерируемых последовательностей.
             seed: Начальное значение для генератора псевдослучайных чисел.
         """
-        gen: RNG = np.random.default_rng(seed=seed)
+        gen: RNG = np.random.default_rng()
         self.v: int = v
         self.alpha: float = alpha
         self.size: int = size

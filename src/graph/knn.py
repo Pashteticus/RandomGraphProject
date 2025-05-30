@@ -21,17 +21,32 @@ class GraphKnn:
         self.n: int = len(ksi)
         self.k: int = k
         self.G: List[List[int]] = [[0 for _ in range(self.n)] for _ in range(self.n)]
+        self.G_list: List[List[int]] = [[] for _ in range(self.n)]
 
         ksi = np.nan_to_num(ksi, nan=ksi.mean())
 
         tmp: List[Tuple[float, int]] = sorted([(ksi[i], i) for i in range(self.n)])
-
+        self.points: List[int] = []
         for i in range(self.n):
-            for j in range(i + 1, min(self.n, i + k + 1)):
+            tmp_add: List[Tuple[float, int]] = []
+            for j in range(max(0, i - k), min(self.n, i + k + 1)):
+                if i == j:
+                    continue
+                tmp_add.append((abs(tmp[i][0] - tmp[j][0]), j))
+            tmp_add.sort()
+            for j in range(min(self.n - 1, k)):
                 idx1: int = tmp[i][1]
-                idx2: int = tmp[j][1]
+                idx2: int = tmp_add[j][1]
                 self.G[idx1][idx2] = 1
                 self.G[idx2][idx1] = 1
+        for i in range(self.n):
+            for j in range(i + 1, self.n):
+                if self.G[i][j]:
+                    self.G_list[i].append(j)
+                    self.G_list[j].append(i)
+
+
+        self.points = [x[1] for x in tmp]
 
     def calc_metric(self) -> int:
         """
@@ -47,7 +62,7 @@ class GraphKnn:
         for v1 in range(self.n):
             for v2 in range(v1 + 1, self.n):
                 for v3 in range(v2 + 1, self.n):
-                    if self.G[v1][v2] and self.G[v1][v3] and self.G[v2][v3]:
+                    if self.G[self.points[v1]][self.points[v2]] and self.G[self.points[v1]][self.points[v3]] and self.G[self.points[v2]][self.points[v3]]:
                         res += 1
         return res
 
@@ -66,8 +81,8 @@ class GraphKnn:
 
         def dfs(v: int) -> None:
             visited[v] = True
-            for u in range(self.n):
-                if self.G[v][u] and not visited[u]:
+            for u in self.G_list[v]:
+                if not visited[u]:
                     dfs(u)
 
         for v in range(self.n):
